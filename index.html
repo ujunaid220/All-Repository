@@ -1,186 +1,265 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JavaScript Assignments</title>
+    <title>Fake Store API Integration</title>
 
     <style>
         *{
             margin:0;
             padding:0;
             box-sizing:border-box;
-            font-family: "Poppins", Arial, sans-serif;
         }
-
+        
         body{
-            min-height:100vh;
+            font-family:Arial, Helvetica, sans-serif;
+            background:linear-gradient(135deg,#1e3c72,#2a5298);
+            padding:30px;
+        }
+        
+        h1{
+            text-align:center;
+            color:#fff;
+            margin-bottom:30px;
+            font-size:40px;
+            letter-spacing:2px;
+        }
+        
+        .search-container{
+            display:flex;
+            justify-content:center;
+            gap:15px;
+            margin-bottom:30px;
+        }
+        
+        input{
+            width:350px;
+            padding:12px 15px;
+            border:none;
+            border-radius:30px;
+            outline:none;
+            font-size:16px;
+        }
+        
+        button{
+            padding:12px 25px;
+            border:none;
+            border-radius:30px;
+            background:#ff9800;
+            color:white;
+            font-size:16px;
+            cursor:pointer;
+            transition:.3s;
+        }
+        
+        button:hover{
+            background:#ff6f00;
+            transform:scale(1.05);
+        }
+        
+        #result{
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+            gap:25px;
+        }
+        
+        .card{
+            background:#ffffff;
+            border-radius:15px;
+            padding:20px;
+            box-shadow:0 10px 20px rgba(0,0,0,.25);
+            transition:.3s;
+        }
+        
+        .card:hover{
+            transform:translateY(-10px);
+        }
+        
+        .number{
+            width:40px;
+            height:40px;
+            border-radius:50%;
+            background:#ff9800;
+            color:#fff;
             display:flex;
             justify-content:center;
             align-items:center;
-            padding:40px;
-            background:linear-gradient(-45deg,#0f2027,#203a43,#2c5364,#1f1c2c,#000428);
-            background-size:400% 400%;
-            animation:bgMove 12s ease infinite;
-            overflow-x:hidden;
-        }
-
-        @keyframes bgMove{
-            0%{background-position:0% 50%;}
-            50%{background-position:100% 50%;}
-            100%{background-position:0% 50%;}
-        }
-
-        body::before{
-            content:"";
-            position:fixed;
-            width:500px;
-            height:500px;
-            background:#00f7ff;
-            border-radius:50%;
-            filter:blur(180px);
-            top:-150px;
-            left:-150px;
-            opacity:.25;
-        }
-
-        body::after{
-            content:"";
-            position:fixed;
-            width:450px;
-            height:450px;
-            background:#ff00c8;
-            border-radius:50%;
-            filter:blur(180px);
-            bottom:-120px;
-            right:-120px;
-            opacity:.25;
-        }
-
-        .container{
-            width:100%;
-            max-width:900px;
-            background:rgba(255,255,255,.08);
-            backdrop-filter:blur(18px);
-            border:1px solid rgba(255,255,255,.15);
-            border-radius:30px;
-            padding:45px;
-            box-shadow:
-                0 20px 60px rgba(0,0,0,.5),
-                inset 0 0 20px rgba(255,255,255,.08);
-            animation:fade 1s ease;
-        }
-
-        @keyframes fade{
-            from{
-                opacity:0;
-                transform:translateY(40px);
-            }
-            to{
-                opacity:1;
-                transform:translateY(0);
-            }
-        }
-
-        h1{
-            text-align:center;
-            color:white;
-            font-size:45px;
-            margin-bottom:35px;
-            letter-spacing:2px;
-            text-shadow:
-                0 0 10px cyan,
-                0 0 20px cyan,
-                0 0 40px cyan;
-        }
-
-        a{
-            display:block;
-            text-decoration:none;
-            margin:18px 0;
-            padding:18px 25px;
-            font-size:20px;
             font-weight:bold;
-            color:white;
-            border-radius:18px;
-            background:linear-gradient(135deg,#00c6ff,#0072ff);
-            box-shadow:
-                0 10px 25px rgba(0,0,0,.4),
-                inset 0 0 10px rgba(255,255,255,.15);
-            transition:.35s;
-            position:relative;
-            overflow:hidden;
+            margin-bottom:15px;
         }
-
-        a::before{
-            content:"";
-            position:absolute;
-            top:0;
-            left:-120%;
-            width:60%;
-            height:100%;
-            background:rgba(255,255,255,.4);
-            transform:skewX(-25deg);
-            transition:.7s;
+        
+        .card img{
+            width:100%;
+            height:220px;
+            object-fit:contain;
+            margin-bottom:15px;
         }
-
-        a:hover::before{
-            left:140%;
+        
+        .card h4{
+            color:#1e3c72;
+            margin-bottom:10px;
         }
-
-        a:hover{
-            transform:translateY(-6px) scale(1.03);
-            background:linear-gradient(135deg,#ff00cc,#3333ff);
-            box-shadow:
-                0 0 20px #00e5ff,
-                0 0 40px #00e5ff,
-                0 20px 40px rgba(0,0,0,.45);
+        
+        .card p{
+            color:#555;
+            line-height:1.6;
         }
-
-        a:active{
-            transform:scale(.98);
+        
+        .price{
+            color:#16a34a;
+            font-size:22px;
+            font-weight:bold;
         }
-
+        
+        .category{
+            color:#ff6f00;
+            font-weight:bold;
+        }
+        
         @media(max-width:768px){
-
-            body{
-                padding:20px;
+        
+            .search-container{
+                flex-direction:column;
             }
-
-            .container{
-                padding:25px;
+        
+            input,
+            button{
+                width:100%;
             }
-
-            h1{
-                font-size:30px;
-            }
-
-            a{
-                font-size:17px;
-                padding:15px;
+        
+            #result{
+                grid-template-columns:1fr;
             }
         }
-    </style>
-
+        </style>
 </head>
+
 <body>
 
-<div class="container">
+    <h1> MUJEEB BHAI KI DUKAAN</h1>
 
-<h1>🚀 JavaScript Assignments 🚀</h1>
+    <div class="search-container">
+        <input placeholder="Search Product..." id="search_input">
+        <button id="search_btn">Search</button>
+    </div>
 
-<a href="Variables.html">Variables</a>
-<a href="IfElse.html">IF Else</a>
-<a href="operators.html">IF Else Operators</a>
-<a href="functions.html">Functions</a>
-<a href="loop.html">Loop</a>
-<a href="shoppinglist.html">Shopping List</a>
-<a href="arraymethods.html">Array Methods</a>
-<a href="futureeventcountdown.html">Future Event Countdown</a>
-<a href="evencalculator.html">Event CountDown And Duration Caluculator</a>
-<a href="studentformatter.html">Student Bio Format</a>
+    <div id="result"></div>
 
-</div>
+    <script>
+
+        let result = document.getElementById("result");
+        let search_input = document.getElementById("search_input");
+        let search_btn = document.getElementById("search_btn");
+
+        let allProducts = [];
+
+        let renderCards = (products) => {
+
+            result.innerHTML = "";
+
+            if(products.length===0){
+                result.innerHTML="<h2>No Product Found!</h2>";
+                return;
+            }
+
+            products.forEach((product,index)=>{
+
+                let card=`
+
+                <div class="card">
+
+                    <div class="number">${index+1}</div>
+
+                    <img src="${product.image}">
+
+                    <h4>${product.title}</h4>
+
+                    <p class="price">$ ${product.price}</p>
+
+                    <p class="category">${product.category}</p>
+
+                    <p>
+                    ${product.description.substring(0,120)}...
+                    </p>
+
+                </div>
+
+                `;
+
+                result.innerHTML+=card;
+
+            });
+
+        }
+
+        let renderList = ()=>{
+
+            fetch("https://fakestoreapi.com/products")
+
+            .then(res=>res.json())
+
+            .then((data)=>{
+
+                allProducts=data;
+
+                renderCards(allProducts);
+
+            })
+
+            .catch((err)=>{
+
+                console.log(err);
+
+                result.innerHTML="<h2>Something went wrong!</h2>";
+
+            });
+
+        }
+
+        renderList();
+
+        let searchProduct=()=>{
+
+            let query=search_input.value.toLowerCase().trim();
+
+            if(query===""){
+
+                renderCards(allProducts);
+
+            }
+
+            else{
+
+                let filterProducts=allProducts.filter((product)=>{
+
+                    return product.title.toLowerCase().includes(query) ||
+
+                    product.category.toLowerCase().includes(query);
+
+                });
+
+                renderCards(filterProducts);
+
+            }
+
+        }
+
+        search_btn.addEventListener("click",searchProduct);
+
+        search_input.addEventListener("keypress",(event)=>{
+
+            if(event.key==="Enter"){
+
+                searchProduct();
+
+            }
+
+        });
+
+    </script>
 
 </body>
+
 </html>
